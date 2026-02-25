@@ -15,27 +15,28 @@
     }
 
     :root {
-      --body-bg:     #0A0A0A;
+      --page-bg:     #060606;
+      --body-bg:     #161616;
       --lcd-bg:      #B8C8AE;
-      --lcd-bg2:     #A8BA9E;
-      --lcd-border:  #7A8A72;
+      --lcd-bg2:     #A2B898;
+      --lcd-border:  #6A7A62;
       --lcd-ink:     #0C1C0A;
-      --lcd-ink2:    #1C3A1A;
+      --lcd-ink2:    #1E3C1C;
       --lcd-dim:     #4A6448;
       --lcd-rate:    #6A8468;
-      --btn-num-a:   #282828;
-      --btn-num-b:   #080808;
-      --btn-fn-a:    #1A261A;
-      --btn-fn-b:    #060C06;
-      --btn-or-a:    #F0920C;
-      --btn-or-b:    #C86008;
-      --led-g:       #1A8A24;
+      --btn-num-a:   #363636;
+      --btn-num-b:   #060606;
+      --btn-fn-a:    #1E2E1E;
+      --btn-fn-b:    #04080A;
+      --btn-or-a:    #F8A020;
+      --btn-or-b:    #C05C06;
+      --led-g:       #18A022;
       --led-r:       #C82020;
     }
 
     html, body {
       height: 100%;
-      background: var(--body-bg);
+      background: var(--page-bg);
       overflow: hidden;
     }
 
@@ -47,13 +48,54 @@
       min-height: 100dvh;
     }
 
-    /* ── Shell ── */
+    /* ── Outer shell (centering only) ── */
     .shell {
-      width: min(100vw, 360px);
-      padding: max(env(safe-area-inset-top), 18px) 16px calc(env(safe-area-inset-bottom) + 16px);
+      width: min(100vw, 370px);
+      padding: max(env(safe-area-inset-top), 10px) 0 max(env(safe-area-inset-bottom), 10px);
+    }
+
+    /* ── Physical calculator body ── */
+    .calc-body {
+      position: relative;
+      background: linear-gradient(175deg, #1C1C1C 0%, #141414 50%, #101010 100%);
+      border-radius: 22px;
+      padding: 22px 18px 28px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 15px;
+      /* Top face edge highlight */
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-left: 1px solid rgba(255,255,255,0.04);
+      border-right: 1px solid rgba(0,0,0,0.6);
+      border-bottom: 1px solid rgba(0,0,0,0.8);
+      box-shadow:
+        /* Close ambient */
+        0 2px 4px   rgba(0,0,0,0.99),
+        /* Near shadow */
+        0 8px 18px  rgba(0,0,0,0.95),
+        /* Mid shadow */
+        0 22px 44px rgba(0,0,0,0.85),
+        /* Far penumbra */
+        0 50px 90px rgba(0,0,0,0.65),
+        /* Massive ground shadow */
+        0 90px 160px rgba(0,0,0,0.40),
+        /* Inner surface ambient */
+        inset 0 1px 0 rgba(255,255,255,0.07),
+        inset 0 0 80px rgba(0,0,0,0.30);
+    }
+
+    /* Subtle bottom "thickness" edge — suggests device has physical depth */
+    .calc-body::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 10px;
+      right: 10px;
+      height: 6px;
+      background: linear-gradient(to bottom, #0A0A0A, transparent);
+      border-radius: 0 0 22px 22px;
+      filter: blur(4px);
+      z-index: -1;
     }
 
     /* ── Brand row ── */
@@ -69,7 +111,7 @@
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: #FFFFFF;
+      color: rgba(255,255,255,0.88);
       font-style: italic;
     }
 
@@ -77,10 +119,25 @@
       font-size: 9px;
       font-weight: 300;
       letter-spacing: 0.18em;
-      color: #444;
+      color: #383838;
     }
 
-    /* ── LCD Display ── */
+    /* ── LCD Display — recessed into body ── */
+    .display-well {
+      /* Outer sunken recess frame */
+      background: #0C0C0C;
+      border-radius: 6px;
+      padding: 3px;
+      box-shadow:
+        inset 0 4px 10px rgba(0,0,0,0.9),
+        inset 0 2px 4px  rgba(0,0,0,0.7),
+        inset 2px 0 4px  rgba(0,0,0,0.4),
+        inset -2px 0 4px rgba(0,0,0,0.4),
+        inset 0 -1px 4px rgba(0,0,0,0.4),
+        /* Top rim highlight (light catches front edge of recess) */
+        0 -1px 0 rgba(255,255,255,0.06);
+    }
+
     .display {
       background: linear-gradient(175deg, var(--lcd-bg) 0%, var(--lcd-bg2) 100%);
       border: 1px solid var(--lcd-border);
@@ -90,9 +147,10 @@
       flex-direction: column;
       gap: 0;
       box-shadow:
-        inset 0 2px 6px rgba(0,0,0,0.35),
-        inset 0 0 1px rgba(0,0,0,0.2),
-        0 1px 0 rgba(255,255,255,0.05);
+        inset 0 3px 10px rgba(0,0,0,0.40),
+        inset 0 1px 3px  rgba(0,0,0,0.25),
+        inset 2px 0 6px  rgba(0,0,0,0.15),
+        inset -2px 0 6px rgba(0,0,0,0.15);
     }
 
     .disp-row {
@@ -126,11 +184,11 @@
       color: var(--lcd-ink2);
     }
 
-    .disp-val.zero { opacity: 0.35; }
+    .disp-val.zero { opacity: 0.30; }
 
     .disp-sep {
       height: 1px;
-      background: rgba(0,0,0,0.15);
+      background: rgba(0,0,0,0.18);
       margin: 2px 0;
     }
 
@@ -143,55 +201,72 @@
       padding-top: 7px;
     }
 
-    /* ── LED indicators (decorative) ── */
+    /* ── LED indicators ── */
     .leds {
       display: flex;
-      gap: 16px;
-      padding: 0 4px;
+      gap: 14px;
+      padding: 0 3px;
     }
 
     .led-unit {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+    }
+
+    .led-socket {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #0A0A0A;
+      box-shadow:
+        inset 0 2px 4px rgba(0,0,0,0.9),
+        inset 0 0 2px rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .led {
-      width: 9px;
-      height: 9px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
     }
 
     .led-g {
-      background: var(--led-g);
-      box-shadow: 0 0 5px rgba(26,138,36,0.8), 0 0 2px rgba(26,138,36,1);
+      background: radial-gradient(circle at 35% 35%, #4AE054, var(--led-g));
+      box-shadow:
+        0 0 6px  rgba(24,160,34,0.9),
+        0 0 12px rgba(24,160,34,0.5),
+        0 0 20px rgba(24,160,34,0.25);
     }
 
     .led-r {
-      background: #3A1010;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+      background: #2A0C0C;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
     }
 
     .led-dot {
       width: 3px;
       height: 3px;
       border-radius: 50%;
-      background: #2A2A2A;
+      background: #1E1E1E;
     }
 
     .led-dot.active {
       background: var(--led-g);
+      box-shadow: 0 0 3px rgba(24,160,34,0.8);
     }
 
     /* ── Keypad ── */
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 11px;
+      gap: 12px;
     }
 
-    /* ── Buttons — round domes ── */
+    /* ── Buttons — high-relief round domes ── */
     .btn {
       aspect-ratio: 1;
       border: none;
@@ -204,70 +279,107 @@
       user-select: none;
       -webkit-user-select: none;
       position: relative;
-      transition: transform 70ms ease, box-shadow 70ms ease;
+      transition: transform 65ms ease, box-shadow 65ms ease, filter 65ms ease;
       -webkit-touch-callout: none;
     }
 
-    /* Number dome */
+    /* Number dome — deep black sphere */
     .btn-n {
-      background: radial-gradient(ellipse at 40% 33%, var(--btn-num-a), var(--btn-num-b) 68%);
-      color: #D8D8D8;
+      background: radial-gradient(ellipse at 36% 28%,
+        #3C3C3C 0%,
+        #1E1E1E 35%,
+        #060606 70%,
+        #020202 100%);
+      color: #CCCCCC;
       font-size: 22px;
       font-weight: 300;
       box-shadow:
-        0 5px 10px rgba(0,0,0,0.95),
-        0 2px 4px  rgba(0,0,0,0.8),
-        inset 0 2px 3px rgba(255,255,255,0.10),
-        inset 0 -3px 5px rgba(0,0,0,0.6);
+        /* Socket ring */
+        0 0 0 1.5px #020202,
+        /* Direct drop shadow */
+        0 5px 8px   rgba(0,0,0,1),
+        0 10px 20px rgba(0,0,0,0.90),
+        0 18px 36px rgba(0,0,0,0.70),
+        /* Specular highlight top of dome */
+        inset 0 4px 7px  rgba(255,255,255,0.16),
+        inset 1px 2px 4px rgba(255,255,255,0.08),
+        /* Dome depth (bottom half) */
+        inset 0 -6px 14px rgba(0,0,0,0.80);
     }
 
     .btn-n:active {
-      transform: scale(0.93);
+      transform: scale(0.91) translateY(2px);
+      filter: brightness(0.75);
       box-shadow:
-        0 2px 4px rgba(0,0,0,0.95),
-        inset 0 1px 2px rgba(255,255,255,0.06),
-        inset 0 4px 8px rgba(0,0,0,0.7);
+        0 0 0 1.5px #020202,
+        0 2px 4px   rgba(0,0,0,1),
+        0 4px 8px   rgba(0,0,0,0.9),
+        inset 0 2px 4px  rgba(255,255,255,0.08),
+        inset 0 6px 14px rgba(0,0,0,0.85);
     }
 
-    /* Function dome (C, ⌫) — slight green tint */
+    /* Function dome — dark green tint */
     .btn-f {
-      background: radial-gradient(ellipse at 40% 33%, var(--btn-fn-a), var(--btn-fn-b) 68%);
-      color: #AABCAA;
+      background: radial-gradient(ellipse at 36% 28%,
+        #243224 0%,
+        #101810 38%,
+        #040804 72%,
+        #020402 100%);
+      color: #9AB49A;
       font-size: 15px;
       font-weight: 500;
-      letter-spacing: 0.03em;
       box-shadow:
-        0 5px 10px rgba(0,0,0,0.95),
-        0 2px 4px  rgba(0,0,0,0.8),
-        inset 0 2px 3px rgba(255,255,255,0.08),
-        inset 0 -3px 5px rgba(0,0,0,0.7);
+        0 0 0 1.5px #020402,
+        0 5px 8px   rgba(0,0,0,1),
+        0 10px 20px rgba(0,0,0,0.90),
+        0 18px 36px rgba(0,0,0,0.70),
+        inset 0 4px 7px  rgba(255,255,255,0.12),
+        inset 1px 2px 4px rgba(255,255,255,0.05),
+        inset 0 -6px 14px rgba(0,0,0,0.85);
     }
 
     .btn-f:active {
-      transform: scale(0.93);
+      transform: scale(0.91) translateY(2px);
+      filter: brightness(0.75);
       box-shadow:
-        0 2px 4px rgba(0,0,0,0.95),
-        inset 0 4px 8px rgba(0,0,0,0.75);
+        0 0 0 1.5px #020402,
+        0 2px 4px rgba(0,0,0,1),
+        0 4px 8px rgba(0,0,0,0.9),
+        inset 0 2px 4px  rgba(255,255,255,0.06),
+        inset 0 6px 14px rgba(0,0,0,0.88);
     }
 
-    /* Orange dome (TAUSCH / = equivalent) */
+    /* Orange dome — warm glow */
     .btn-o {
-      background: radial-gradient(ellipse at 40% 33%, var(--btn-or-a), var(--btn-or-b) 68%);
+      background: radial-gradient(ellipse at 36% 28%,
+        #FFBA30 0%,
+        #E88010 40%,
+        #B05008 72%,
+        #803006 100%);
       color: #FFF5E8;
       box-shadow:
-        0 5px 10px rgba(0,0,0,0.9),
-        0 2px 4px  rgba(0,0,0,0.7),
-        0 0 12px   rgba(220,100,10,0.25),
-        inset 0 2px 3px rgba(255,220,120,0.25),
-        inset 0 -3px 5px rgba(0,0,0,0.5);
+        0 0 0 1.5px #5A1E02,
+        0 5px 8px   rgba(0,0,0,1),
+        0 10px 20px rgba(0,0,0,0.85),
+        0 18px 36px rgba(0,0,0,0.65),
+        /* Orange ambient glow */
+        0 0 24px    rgba(220,110,10,0.35),
+        0 0 48px    rgba(200,90,8,0.15),
+        inset 0 4px 8px  rgba(255,230,120,0.35),
+        inset 1px 2px 4px rgba(255,255,200,0.15),
+        inset 0 -6px 14px rgba(0,0,0,0.60);
     }
 
     .btn-o:active {
-      transform: scale(0.93);
+      transform: scale(0.91) translateY(2px);
+      filter: brightness(0.78);
       box-shadow:
-        0 2px 4px rgba(0,0,0,0.9),
-        0 0 6px rgba(220,100,10,0.2),
-        inset 0 4px 8px rgba(0,0,0,0.5);
+        0 0 0 1.5px #5A1E02,
+        0 2px 4px rgba(0,0,0,1),
+        0 4px 8px rgba(0,0,0,0.9),
+        0 0 12px rgba(220,110,10,0.25),
+        inset 0 2px 4px  rgba(255,230,120,0.15),
+        inset 0 6px 14px rgba(0,0,0,0.65);
     }
 
     /* Orange button inner layout */
@@ -285,7 +397,7 @@
     /* Swap flash */
     @keyframes lcdFlash {
       0%   { opacity: 1; }
-      25%  { opacity: 0.25; }
+      25%  { opacity: 0.20; }
       100% { opacity: 1; }
     }
     .display.flash .disp-val {
@@ -295,32 +407,35 @@
 </head>
 <body>
   <div class="shell">
+   <div class="calc-body">
 
     <div class="brand-row">
       <span class="brand">BrAun</span>
       <span class="model">ET 77 · TZS / EUR</span>
     </div>
 
-    <div class="display" id="display">
-      <div class="disp-row">
-        <span class="disp-label" id="labelFrom">EUR</span>
-        <span class="disp-val"   id="amtFrom">0</span>
+    <div class="display-well">
+      <div class="display" id="display">
+        <div class="disp-row">
+          <span class="disp-label" id="labelFrom">EUR</span>
+          <span class="disp-val"   id="amtFrom">0</span>
+        </div>
+        <div class="disp-sep"></div>
+        <div class="disp-row">
+          <span class="disp-label" id="labelTo">TZS</span>
+          <span class="disp-val result" id="amtTo">0</span>
+        </div>
+        <div class="disp-rate" id="rateInfo">Kurs wird geladen …</div>
       </div>
-      <div class="disp-sep"></div>
-      <div class="disp-row">
-        <span class="disp-label" id="labelTo">TZS</span>
-        <span class="disp-val result" id="amtTo">0</span>
-      </div>
-      <div class="disp-rate" id="rateInfo">Kurs wird geladen …</div>
     </div>
 
     <div class="leds">
       <div class="led-unit">
-        <div class="led led-g"></div>
+        <div class="led-socket"><div class="led led-g"></div></div>
         <div class="led-dot active"></div>
       </div>
       <div class="led-unit">
-        <div class="led led-r"></div>
+        <div class="led-socket"><div class="led led-r"></div></div>
         <div class="led-dot"></div>
       </div>
     </div>
@@ -352,7 +467,8 @@
       <button class="btn btn-n" ontouchstart="" onclick="press('00')">00</button>
     </div>
 
-  </div>
+   </div><!-- /.calc-body -->
+  </div><!-- /.shell -->
 
   <script>
     let input = '';

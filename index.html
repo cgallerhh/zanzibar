@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Zanzibar">
+  <title>Zanzibar</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --body:        #C2BDB7;
+      --body-dark:   #A8A39D;
+      --disp-bezel:  #18160F;
+      --disp-bg:     #0C0B09;
+      --disp-from:   #EAD89E;
+      --disp-to:     #E8610D;
+      --disp-label:  #4A4640;
+      --disp-rate:   #302E2A;
+      --disp-dot:    #2A2824;
+      --btn-n-bg:    #D8D3CC;
+      --btn-n-top:   #E4DFDA;
+      --btn-n-bot:   #A8A39D;
+      --btn-n-txt:   #1A1816;
+      --btn-f-bg:    #3A3632;
+      --btn-f-top:   #4A4642;
+      --btn-f-bot:   #1E1C18;
+      --btn-f-txt:   #EAE4D8;
+      --btn-o-bg:    #E8610D;
+      --btn-o-top:   #F07030;
+      --btn-o-bot:   #A03C06;
+      --btn-o-txt:   #FFF4E6;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--body);
+    }
+
+    body {
+      font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+    }
+
+    /* ── Outer shell ── */
+    .shell {
+      width: min(100vw, 390px);
+      padding: 0 14px calc(14px + env(safe-area-inset-bottom));
+      padding-top: max(20px, env(safe-area-inset-top));
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── Brand ── */
+    .brand {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 0 2px;
+    }
+
+    .brand-name {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: #7A7570;
+    }
+
+    .brand-model {
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: #9A9590;
+    }
+
+    /* ── Display ── */
+    .display {
+      background: var(--disp-bg);
+      border-radius: 7px;
+      padding: 16px 18px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      box-shadow:
+        0 0 0 1px var(--disp-bezel),
+        0 6px 24px rgba(0,0,0,0.55),
+        inset 0 1px 6px rgba(0,0,0,0.7),
+        inset 0 0 30px rgba(0,0,0,0.3);
+    }
+
+    .disp-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 6px 0;
+    }
+
+    .disp-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--disp-label);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .disp-amount {
+      font-size: 44px;
+      font-weight: 100;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      text-align: right;
+      color: var(--disp-from);
+      min-height: 50px;
+      overflow: hidden;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      transition: opacity 0.1s;
+    }
+
+    .disp-amount.result {
+      font-size: 32px;
+      font-weight: 200;
+      color: var(--disp-to);
+      min-height: 38px;
+    }
+
+    .disp-amount.zero {
+      opacity: 0.35;
+    }
+
+    .disp-sep {
+      height: 1px;
+      background: var(--disp-dot);
+      margin: 2px 0;
+    }
+
+    .disp-rate {
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: var(--disp-rate);
+      text-align: right;
+      padding-top: 8px;
+      min-height: 20px;
+    }
+
+    /* ── Keypad ── */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .btn {
+      height: 70px;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      position: relative;
+      transition: transform 80ms ease, box-shadow 80ms ease;
+    }
+
+    /* Number buttons */
+    .btn-n {
+      background: linear-gradient(180deg, var(--btn-n-top) 0%, var(--btn-n-bg) 50%, var(--btn-n-bg) 100%);
+      color: var(--btn-n-txt);
+      font-size: 24px;
+      font-weight: 300;
+      box-shadow:
+        0 3px 0 var(--btn-n-bot),
+        0 4px 8px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .btn-n:active {
+      transform: translateY(2px);
+      box-shadow:
+        0 1px 0 var(--btn-n-bot),
+        0 1px 3px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(0,0,0,0.1);
+    }
+
+    /* Function buttons (C, ⌫) */
+    .btn-f {
+      background: linear-gradient(180deg, var(--btn-f-top) 0%, var(--btn-f-bg) 50%);
+      color: var(--btn-f-txt);
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      box-shadow:
+        0 3px 0 var(--btn-f-bot),
+        0 4px 8px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    .btn-f:active {
+      transform: translateY(2px);
+      box-shadow:
+        0 1px 0 var(--btn-f-bot),
+        0 1px 3px rgba(0,0,0,0.25);
+    }
+
+    /* Swap/Orange button */
+    .btn-o {
+      background: linear-gradient(180deg, var(--btn-o-top) 0%, var(--btn-o-bg) 60%);
+      color: var(--btn-o-txt);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow:
+        0 3px 0 var(--btn-o-bot),
+        0 4px 10px rgba(232,97,13,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .btn-o:active {
+      transform: translateY(2px);
+      box-shadow:
+        0 1px 0 var(--btn-o-bot),
+        0 1px 4px rgba(232,97,13,0.2);
+    }
+
+    /* Swap icon inside orange button */
+    .swap-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      line-height: 1;
+    }
+
+    .swap-arrows {
+      font-size: 18px;
+      letter-spacing: -0.05em;
+    }
+
+    .swap-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      opacity: 0.85;
+    }
+
+    /* Animate swap */
+    @keyframes swapFlash {
+      0%   { opacity: 1; }
+      30%  { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    .display.swapping .disp-amount {
+      animation: swapFlash 0.25s ease forwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="brand">
+      <span class="brand-name">BRAUN</span>
+      <span class="brand-model">ET — 77 · TZS/EUR</span>
+    </div>
+
+    <div class="display" id="display">
+      <div class="disp-row">
+        <span class="disp-label" id="labelFrom">EUR</span>
+        <div class="disp-amount" id="amtFrom">0</div>
+      </div>
+      <div class="disp-sep"></div>
+      <div class="disp-row">
+        <span class="disp-label" id="labelTo">TZS</span>
+        <div class="disp-amount result" id="amtTo">0</div>
+      </div>
+      <div class="disp-rate" id="rateInfo">Kurs wird geladen …</div>
+    </div>
+
+    <div class="keypad">
+      <button class="btn btn-f" ontouchstart="" onclick="press('C')">C</button>
+      <button class="btn btn-f" ontouchstart="" onclick="press('back')">⌫</button>
+      <button class="btn btn-o" ontouchstart="" onclick="swap()">
+        <span class="swap-inner">
+          <span class="swap-arrows">⇅</span>
+          <span class="swap-label">Tausch</span>
+        </span>
+      </button>
+
+      <button class="btn btn-n" ontouchstart="" onclick="press('7')">7</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('8')">8</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('9')">9</button>
+
+      <button class="btn btn-n" ontouchstart="" onclick="press('4')">4</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('5')">5</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('6')">6</button>
+
+      <button class="btn btn-n" ontouchstart="" onclick="press('1')">1</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('2')">2</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('3')">3</button>
+
+      <button class="btn btn-n" ontouchstart="" onclick="press(',')">&#44;</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('0')">0</button>
+      <button class="btn btn-n" ontouchstart="" onclick="press('00')">00</button>
+    </div>
+
+  </div>
+
+  <script>
+    // ─── State ───────────────────────────────────────────────
+    let input = '';                  // raw string, comma as decimal
+    let mode  = 'EUR_TO_TZS';       // or 'TZS_TO_EUR'
+    let rate  = 2760;                // fallback: 1 EUR = 2760 TZS
+    let rateDate = '';
+
+    // ─── Fetch live rate ─────────────────────────────────────
+    (async () => {
+      try {
+        const r = await fetch('https://open.er-api.com/v6/latest/EUR', { cache: 'no-cache' });
+        const d = await r.json();
+        if (d.rates?.TZS) {
+          rate = d.rates.TZS;
+          const ts = d.time_last_update_utc;
+          rateDate = ts
+            ? new Date(ts).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' })
+            : '';
+        }
+      } catch (_) { /* use fallback */ }
+      renderRate();
+      render();
+    })();
+
+    // ─── Logic ───────────────────────────────────────────────
+    function press(v) {
+      if (v === 'C') {
+        input = '';
+      } else if (v === 'back') {
+        input = input.slice(0, -1);
+      } else if (v === ',') {
+        if (input.includes(',')) return;
+        input = input === '' ? '0,' : input + ',';
+      } else if (v === '00') {
+        if (input === '' || input === '0') return;
+        if (input.includes(',')) {
+          // allow two decimal digits after comma
+          const parts = input.split(',');
+          if (parts[1] !== undefined && parts[1].length >= 2) return;
+          input += '00';
+        } else {
+          input += '00';
+        }
+      } else {
+        // digit
+        if (input === '0') {
+          input = v;
+        } else {
+          // don't exceed 12 significant digits
+          const digits = input.replace(/[^0-9]/g, '');
+          if (digits.length >= 12) return;
+          input += v;
+        }
+      }
+      render();
+    }
+
+    function swap() {
+      mode  = mode === 'EUR_TO_TZS' ? 'TZS_TO_EUR' : 'EUR_TO_TZS';
+      input = '';
+      // flash animation
+      const disp = document.getElementById('display');
+      disp.classList.add('swapping');
+      setTimeout(() => disp.classList.remove('swapping'), 280);
+      render();
+    }
+
+    // ─── Rendering ───────────────────────────────────────────
+    function parseNum() {
+      if (!input) return 0;
+      return parseFloat(input.replace(',', '.')) || 0;
+    }
+
+    function fmtInput(str) {
+      // Show the raw string while typing; show 0 if empty
+      return str || '0';
+    }
+
+    function fmtResult(val, isTZS) {
+      if (!isFinite(val) || val === 0) return '0';
+      if (isTZS) {
+        return val.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+      }
+      return val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function render() {
+      const amount = parseNum();
+      const isEUR  = mode === 'EUR_TO_TZS';
+      const result = isEUR ? amount * rate : amount / rate;
+
+      document.getElementById('labelFrom').textContent = isEUR ? 'EUR' : 'TZS';
+      document.getElementById('labelTo'  ).textContent = isEUR ? 'TZS' : 'EUR';
+
+      const fromEl = document.getElementById('amtFrom');
+      const toEl   = document.getElementById('amtTo');
+
+      fromEl.textContent = fmtInput(input);
+      fromEl.classList.toggle('zero', !input);
+
+      toEl.textContent = fmtResult(result, isEUR /* result is TZS when isEUR */);
+      toEl.classList.toggle('zero', amount === 0);
+
+      // auto-shrink large numbers in the input row
+      const len = (input || '0').length;
+      fromEl.style.fontSize = len > 10 ? '28px' : len > 7 ? '36px' : '44px';
+    }
+
+    function renderRate() {
+      const el = document.getElementById('rateInfo');
+      const r  = rate.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+      el.textContent = `1 EUR = ${r} TZS${rateDate ? '  ·  ' + rateDate : ''}`;
+    }
+
+    // ─── Keyboard support (desktop testing) ──────────────────
+    document.addEventListener('keydown', e => {
+      if (e.key >= '0' && e.key <= '9') press(e.key);
+      else if (e.key === ',' || e.key === '.') press(',');
+      else if (e.key === 'Backspace') press('back');
+      else if (e.key === 'Escape' || e.key.toLowerCase() === 'c') press('C');
+      else if (e.key === 's' || e.key === 'S') swap();
+    });
+
+    // Initial render
+    render();
+    renderRate();
+  </script>
+</body>
+</html>

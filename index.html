@@ -454,6 +454,11 @@
           <span class="disp-label" id="labelTo">TZS</span>
           <span class="disp-val result" id="amtTo">0</span>
         </div>
+        <div class="disp-sep"></div>
+        <div class="disp-row">
+          <span class="disp-label">USD</span>
+          <span class="disp-val result" id="amtUSD">0</span>
+        </div>
         <div class="disp-rate" id="rateInfo">Kurs wird geladen …</div>
       </div>
     </div>
@@ -500,9 +505,10 @@
   </div><!-- /.shell -->
 
   <script>
-    let input = '';
-    let mode  = 'EUR_TO_TZS';
-    let rate  = 2760;
+    let input   = '';
+    let mode    = 'EUR_TO_TZS';
+    let rate    = 2760;
+    let rateUSD = 1.08;
     let rateDate = '';
 
     (async () => {
@@ -516,6 +522,7 @@
             ? new Date(ts).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'2-digit' })
             : '';
         }
+        if (d.rates?.USD) { rateUSD = d.rates.USD; }
       } catch (_) {}
       renderRate();
       render();
@@ -594,6 +601,15 @@
       te.textContent   = toStr;
       te.dataset.ghost = toStr.replace(/\d/g, '8');
       te.classList.toggle('zero', amount === 0);
+
+      // USD row — always EUR-equivalent × rateUSD
+      const ue = document.getElementById('amtUSD');
+      const eurAmount = isEUR ? amount : amount / rate;
+      const usdAmount = eurAmount * rateUSD;
+      const usdStr    = fmtResult(usdAmount, false);
+      ue.textContent   = usdStr;
+      ue.dataset.ghost = usdStr.replace(/\d/g, '8');
+      ue.classList.toggle('zero', amount === 0);
     }
 
     function renderRate() {

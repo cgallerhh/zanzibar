@@ -8,6 +8,15 @@
   <meta name="apple-mobile-web-app-title" content="Zanzibar">
   <title>Zanzibar</title>
   <style>
+    /* ── 7-Segment LCD font (DSEG7 Classic Italic) ── */
+    @font-face {
+      font-family: 'DSEG7';
+      src: url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Italic.woff2') format('woff2');
+      font-weight: normal;
+      font-style: italic;
+      font-display: swap;
+    }
+
     *, *::before, *::after {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
@@ -168,23 +177,43 @@
     }
 
     .disp-val {
-      font-size: 38px;
-      font-weight: 100;
-      letter-spacing: -0.01em;
+      font-family: 'DSEG7', 'Courier New', monospace;
+      font-style: italic;
+      font-weight: normal;
+      font-size: 34px;
+      letter-spacing: 0.04em;
       color: var(--lcd-ink);
-      font-variant-numeric: tabular-nums;
       text-align: right;
-      line-height: 1;
+      line-height: 1.15;
       transition: opacity 0.08s;
+      position: relative; /* anchor for ghost layer */
+      white-space: nowrap;
+    }
+
+    /* Ghost segments — unlit LCD segments shown faintly behind */
+    .disp-val::before {
+      content: attr(data-ghost);
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
+      text-align: right;
+      font-family: 'DSEG7', 'Courier New', monospace;
+      font-style: italic;
+      font-size: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+      color: rgba(8, 28, 8, 0.18);
+      pointer-events: none;
+      white-space: nowrap;
     }
 
     .disp-val.result {
-      font-size: 26px;
-      font-weight: 200;
+      font-size: 23px;
       color: var(--lcd-ink2);
     }
 
-    .disp-val.zero { opacity: 0.30; }
+    .disp-val.zero { opacity: 0.32; }
 
     .disp-sep {
       height: 1px;
@@ -551,14 +580,19 @@
       const fe = document.getElementById('amtFrom');
       const te = document.getElementById('amtTo');
 
-      fe.textContent = fmtInput(input);
+      const fromStr = fmtInput(input);
+      const toStr   = fmtResult(result, isEUR);
+
+      fe.textContent    = fromStr;
+      fe.dataset.ghost  = fromStr.replace(/\d/g, '8');
       fe.classList.toggle('zero', !input);
 
-      // auto-shrink long input
-      const len = (input || '0').length;
-      fe.style.fontSize = len > 10 ? '24px' : len > 7 ? '30px' : '38px';
+      // auto-shrink based on formatted character count
+      const flen = fromStr.length;
+      fe.style.fontSize = flen > 11 ? '20px' : flen > 8 ? '26px' : '34px';
 
-      te.textContent = fmtResult(result, isEUR);
+      te.textContent   = toStr;
+      te.dataset.ghost = toStr.replace(/\d/g, '8');
       te.classList.toggle('zero', amount === 0);
     }
 

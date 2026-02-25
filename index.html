@@ -11,164 +11,191 @@
     *, *::before, *::after {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
     }
 
     :root {
-      --body:        #C2BDB7;
-      --body-dark:   #A8A39D;
-      --disp-bezel:  #18160F;
-      --disp-bg:     #0C0B09;
-      --disp-from:   #EAD89E;
-      --disp-to:     #E8610D;
-      --disp-label:  #4A4640;
-      --disp-rate:   #302E2A;
-      --disp-dot:    #2A2824;
-      --btn-n-bg:    #D8D3CC;
-      --btn-n-top:   #E4DFDA;
-      --btn-n-bot:   #A8A39D;
-      --btn-n-txt:   #1A1816;
-      --btn-f-bg:    #3A3632;
-      --btn-f-top:   #4A4642;
-      --btn-f-bot:   #1E1C18;
-      --btn-f-txt:   #EAE4D8;
-      --btn-o-bg:    #E8610D;
-      --btn-o-top:   #F07030;
-      --btn-o-bot:   #A03C06;
-      --btn-o-txt:   #FFF4E6;
+      --body-bg:     #0A0A0A;
+      --lcd-bg:      #B8C8AE;
+      --lcd-bg2:     #A8BA9E;
+      --lcd-border:  #7A8A72;
+      --lcd-ink:     #0C1C0A;
+      --lcd-ink2:    #1C3A1A;
+      --lcd-dim:     #4A6448;
+      --lcd-rate:    #6A8468;
+      --btn-num-a:   #282828;
+      --btn-num-b:   #080808;
+      --btn-fn-a:    #1A261A;
+      --btn-fn-b:    #060C06;
+      --btn-or-a:    #F0920C;
+      --btn-or-b:    #C86008;
+      --led-g:       #1A8A24;
+      --led-r:       #C82020;
     }
 
     html, body {
       height: 100%;
+      background: var(--body-bg);
       overflow: hidden;
-      background: var(--body);
     }
 
     body {
-      font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100dvh;
     }
 
-    /* ── Outer shell ── */
+    /* ── Shell ── */
     .shell {
-      width: min(100vw, 390px);
-      padding: 0 14px calc(14px + env(safe-area-inset-bottom));
-      padding-top: max(20px, env(safe-area-inset-top));
+      width: min(100vw, 360px);
+      padding: max(env(safe-area-inset-top), 18px) 16px calc(env(safe-area-inset-bottom) + 16px);
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
-    /* ── Brand ── */
-    .brand {
+    /* ── Brand row ── */
+    .brand-row {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
       padding: 0 2px;
     }
 
-    .brand-name {
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: 0.5em;
+    .brand {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: #7A7570;
+      color: #FFFFFF;
+      font-style: italic;
     }
 
-    .brand-model {
+    .model {
       font-size: 9px;
       font-weight: 300;
-      letter-spacing: 0.15em;
-      color: #9A9590;
+      letter-spacing: 0.18em;
+      color: #444;
     }
 
-    /* ── Display ── */
+    /* ── LCD Display ── */
     .display {
-      background: var(--disp-bg);
-      border-radius: 7px;
-      padding: 16px 18px 13px;
+      background: linear-gradient(175deg, var(--lcd-bg) 0%, var(--lcd-bg2) 100%);
+      border: 1px solid var(--lcd-border);
+      border-radius: 4px;
+      padding: 14px 16px 12px;
       display: flex;
       flex-direction: column;
       gap: 0;
       box-shadow:
-        0 0 0 1px var(--disp-bezel),
-        0 6px 24px rgba(0,0,0,0.55),
-        inset 0 1px 6px rgba(0,0,0,0.7),
-        inset 0 0 30px rgba(0,0,0,0.3);
+        inset 0 2px 6px rgba(0,0,0,0.35),
+        inset 0 0 1px rgba(0,0,0,0.2),
+        0 1px 0 rgba(255,255,255,0.05);
     }
 
     .disp-row {
       display: flex;
-      flex-direction: column;
-      gap: 3px;
-      padding: 6px 0;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 5px 0;
     }
 
     .disp-label {
       font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--disp-label);
-      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--lcd-dim);
     }
 
-    .disp-amount {
-      font-size: 44px;
+    .disp-val {
+      font-size: 38px;
       font-weight: 100;
       letter-spacing: -0.01em;
-      line-height: 1;
-      text-align: right;
-      color: var(--disp-from);
-      min-height: 50px;
-      overflow: hidden;
-      white-space: nowrap;
+      color: var(--lcd-ink);
       font-variant-numeric: tabular-nums;
-      transition: opacity 0.1s;
+      text-align: right;
+      line-height: 1;
+      transition: opacity 0.08s;
     }
 
-    .disp-amount.result {
-      font-size: 32px;
+    .disp-val.result {
+      font-size: 26px;
       font-weight: 200;
-      color: var(--disp-to);
-      min-height: 38px;
+      color: var(--lcd-ink2);
     }
 
-    .disp-amount.zero {
-      opacity: 0.35;
-    }
+    .disp-val.zero { opacity: 0.35; }
 
     .disp-sep {
       height: 1px;
-      background: var(--disp-dot);
+      background: rgba(0,0,0,0.15);
       margin: 2px 0;
     }
 
     .disp-rate {
-      font-size: 9px;
-      font-weight: 300;
-      letter-spacing: 0.12em;
-      color: var(--disp-rate);
+      font-size: 8.5px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--lcd-rate);
       text-align: right;
-      padding-top: 8px;
-      min-height: 20px;
+      padding-top: 7px;
+    }
+
+    /* ── LED indicators (decorative) ── */
+    .leds {
+      display: flex;
+      gap: 16px;
+      padding: 0 4px;
+    }
+
+    .led-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .led {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .led-g {
+      background: var(--led-g);
+      box-shadow: 0 0 5px rgba(26,138,36,0.8), 0 0 2px rgba(26,138,36,1);
+    }
+
+    .led-r {
+      background: #3A1010;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .led-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #2A2A2A;
+    }
+
+    .led-dot.active {
+      background: var(--led-g);
     }
 
     /* ── Keypad ── */
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 11px;
     }
 
+    /* ── Buttons — round domes ── */
     .btn {
-      height: 70px;
+      aspect-ratio: 1;
       border: none;
-      border-radius: 6px;
+      border-radius: 50%;
       font-family: inherit;
       cursor: pointer;
       display: flex;
@@ -177,131 +204,134 @@
       user-select: none;
       -webkit-user-select: none;
       position: relative;
-      transition: transform 80ms ease, box-shadow 80ms ease;
+      transition: transform 70ms ease, box-shadow 70ms ease;
+      -webkit-touch-callout: none;
     }
 
-    /* Number buttons */
+    /* Number dome */
     .btn-n {
-      background: linear-gradient(180deg, var(--btn-n-top) 0%, var(--btn-n-bg) 50%, var(--btn-n-bg) 100%);
-      color: var(--btn-n-txt);
-      font-size: 24px;
+      background: radial-gradient(ellipse at 40% 33%, var(--btn-num-a), var(--btn-num-b) 68%);
+      color: #D8D8D8;
+      font-size: 22px;
       font-weight: 300;
       box-shadow:
-        0 3px 0 var(--btn-n-bot),
-        0 4px 8px rgba(0,0,0,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.35);
+        0 5px 10px rgba(0,0,0,0.95),
+        0 2px 4px  rgba(0,0,0,0.8),
+        inset 0 2px 3px rgba(255,255,255,0.10),
+        inset 0 -3px 5px rgba(0,0,0,0.6);
     }
 
     .btn-n:active {
-      transform: translateY(2px);
+      transform: scale(0.93);
       box-shadow:
-        0 1px 0 var(--btn-n-bot),
-        0 1px 3px rgba(0,0,0,0.2),
-        inset 0 1px 0 rgba(0,0,0,0.1);
+        0 2px 4px rgba(0,0,0,0.95),
+        inset 0 1px 2px rgba(255,255,255,0.06),
+        inset 0 4px 8px rgba(0,0,0,0.7);
     }
 
-    /* Function buttons (C, ⌫) */
+    /* Function dome (C, ⌫) — slight green tint */
     .btn-f {
-      background: linear-gradient(180deg, var(--btn-f-top) 0%, var(--btn-f-bg) 50%);
-      color: var(--btn-f-txt);
-      font-size: 16px;
-      font-weight: 400;
-      letter-spacing: 0.05em;
+      background: radial-gradient(ellipse at 40% 33%, var(--btn-fn-a), var(--btn-fn-b) 68%);
+      color: #AABCAA;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
       box-shadow:
-        0 3px 0 var(--btn-f-bot),
-        0 4px 8px rgba(0,0,0,0.35),
-        inset 0 1px 0 rgba(255,255,255,0.12);
+        0 5px 10px rgba(0,0,0,0.95),
+        0 2px 4px  rgba(0,0,0,0.8),
+        inset 0 2px 3px rgba(255,255,255,0.08),
+        inset 0 -3px 5px rgba(0,0,0,0.7);
     }
 
     .btn-f:active {
-      transform: translateY(2px);
+      transform: scale(0.93);
       box-shadow:
-        0 1px 0 var(--btn-f-bot),
-        0 1px 3px rgba(0,0,0,0.25);
+        0 2px 4px rgba(0,0,0,0.95),
+        inset 0 4px 8px rgba(0,0,0,0.75);
     }
 
-    /* Swap/Orange button */
+    /* Orange dome (TAUSCH / = equivalent) */
     .btn-o {
-      background: linear-gradient(180deg, var(--btn-o-top) 0%, var(--btn-o-bg) 60%);
-      color: var(--btn-o-txt);
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      background: radial-gradient(ellipse at 40% 33%, var(--btn-or-a), var(--btn-or-b) 68%);
+      color: #FFF5E8;
       box-shadow:
-        0 3px 0 var(--btn-o-bot),
-        0 4px 10px rgba(232,97,13,0.35),
-        inset 0 1px 0 rgba(255,255,255,0.25);
+        0 5px 10px rgba(0,0,0,0.9),
+        0 2px 4px  rgba(0,0,0,0.7),
+        0 0 12px   rgba(220,100,10,0.25),
+        inset 0 2px 3px rgba(255,220,120,0.25),
+        inset 0 -3px 5px rgba(0,0,0,0.5);
     }
 
     .btn-o:active {
-      transform: translateY(2px);
+      transform: scale(0.93);
       box-shadow:
-        0 1px 0 var(--btn-o-bot),
-        0 1px 4px rgba(232,97,13,0.2);
+        0 2px 4px rgba(0,0,0,0.9),
+        0 0 6px rgba(220,100,10,0.2),
+        inset 0 4px 8px rgba(0,0,0,0.5);
     }
 
-    /* Swap icon inside orange button */
+    /* Orange button inner layout */
     .swap-inner {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      gap: 2px;
       line-height: 1;
     }
 
-    .swap-arrows {
-      font-size: 18px;
-      letter-spacing: -0.05em;
-    }
+    .swap-arrows { font-size: 18px; }
+    .swap-text   { font-size: 7.5px; font-weight: 600; letter-spacing: 0.16em; opacity: 0.85; }
 
-    .swap-label {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      opacity: 0.85;
-    }
-
-    /* Animate swap */
-    @keyframes swapFlash {
+    /* Swap flash */
+    @keyframes lcdFlash {
       0%   { opacity: 1; }
-      30%  { opacity: 0.3; }
+      25%  { opacity: 0.25; }
       100% { opacity: 1; }
     }
-
-    .display.swapping .disp-amount {
-      animation: swapFlash 0.25s ease forwards;
+    .display.flash .disp-val {
+      animation: lcdFlash 0.22s ease forwards;
     }
   </style>
 </head>
 <body>
   <div class="shell">
 
-    <div class="brand">
-      <span class="brand-name">BRAUN</span>
-      <span class="brand-model">ET — 77 · TZS/EUR</span>
+    <div class="brand-row">
+      <span class="brand">BrAun</span>
+      <span class="model">ET 77 · TZS / EUR</span>
     </div>
 
     <div class="display" id="display">
       <div class="disp-row">
         <span class="disp-label" id="labelFrom">EUR</span>
-        <div class="disp-amount" id="amtFrom">0</div>
+        <span class="disp-val"   id="amtFrom">0</span>
       </div>
       <div class="disp-sep"></div>
       <div class="disp-row">
         <span class="disp-label" id="labelTo">TZS</span>
-        <div class="disp-amount result" id="amtTo">0</div>
+        <span class="disp-val result" id="amtTo">0</span>
       </div>
       <div class="disp-rate" id="rateInfo">Kurs wird geladen …</div>
     </div>
 
+    <div class="leds">
+      <div class="led-unit">
+        <div class="led led-g"></div>
+        <div class="led-dot active"></div>
+      </div>
+      <div class="led-unit">
+        <div class="led led-r"></div>
+        <div class="led-dot"></div>
+      </div>
+    </div>
+
     <div class="keypad">
-      <button class="btn btn-f" ontouchstart="" onclick="press('C')">C</button>
-      <button class="btn btn-f" ontouchstart="" onclick="press('back')">⌫</button>
-      <button class="btn btn-o" ontouchstart="" onclick="swap()">
+      <button class="btn btn-f"  ontouchstart="" onclick="press('C')">C</button>
+      <button class="btn btn-f"  ontouchstart="" onclick="press('back')">⌫</button>
+      <button class="btn btn-o"  ontouchstart="" onclick="swap()">
         <span class="swap-inner">
           <span class="swap-arrows">⇅</span>
-          <span class="swap-label">Tausch</span>
+          <span class="swap-text">TAUSCH</span>
         </span>
       </button>
 
@@ -325,13 +355,11 @@
   </div>
 
   <script>
-    // ─── State ───────────────────────────────────────────────
-    let input = '';                  // raw string, comma as decimal
-    let mode  = 'EUR_TO_TZS';       // or 'TZS_TO_EUR'
-    let rate  = 2760;                // fallback: 1 EUR = 2760 TZS
+    let input = '';
+    let mode  = 'EUR_TO_TZS';
+    let rate  = 2760;
     let rateDate = '';
 
-    // ─── Fetch live rate ─────────────────────────────────────
     (async () => {
       try {
         const r = await fetch('https://open.er-api.com/v6/latest/EUR', { cache: 'no-cache' });
@@ -340,15 +368,14 @@
           rate = d.rates.TZS;
           const ts = d.time_last_update_utc;
           rateDate = ts
-            ? new Date(ts).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' })
+            ? new Date(ts).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'2-digit' })
             : '';
         }
-      } catch (_) { /* use fallback */ }
+      } catch (_) {}
       renderRate();
       render();
     })();
 
-    // ─── Logic ───────────────────────────────────────────────
     function press(v) {
       if (v === 'C') {
         input = '';
@@ -359,22 +386,13 @@
         input = input === '' ? '0,' : input + ',';
       } else if (v === '00') {
         if (input === '' || input === '0') return;
-        if (input.includes(',')) {
-          // allow two decimal digits after comma
-          const parts = input.split(',');
-          if (parts[1] !== undefined && parts[1].length >= 2) return;
-          input += '00';
-        } else {
-          input += '00';
-        }
+        const digits = input.replace(/[^0-9]/g, '');
+        if (digits.length >= 11) return;
+        input += '00';
       } else {
-        // digit
-        if (input === '0') {
-          input = v;
-        } else {
-          // don't exceed 12 significant digits
-          const digits = input.replace(/[^0-9]/g, '');
-          if (digits.length >= 12) return;
+        if (input === '0') { input = v; }
+        else {
+          if (input.replace(/[^0-9]/g, '').length >= 12) return;
           input += v;
         }
       }
@@ -384,52 +402,41 @@
     function swap() {
       mode  = mode === 'EUR_TO_TZS' ? 'TZS_TO_EUR' : 'EUR_TO_TZS';
       input = '';
-      // flash animation
-      const disp = document.getElementById('display');
-      disp.classList.add('swapping');
-      setTimeout(() => disp.classList.remove('swapping'), 280);
+      const d = document.getElementById('display');
+      d.classList.add('flash');
+      setTimeout(() => d.classList.remove('flash'), 250);
       render();
     }
 
-    // ─── Rendering ───────────────────────────────────────────
-    function parseNum() {
-      if (!input) return 0;
-      return parseFloat(input.replace(',', '.')) || 0;
-    }
-
-    function fmtInput(str) {
-      // Show the raw string while typing; show 0 if empty
-      return str || '0';
-    }
+    function parseNum()  { return input ? parseFloat(input.replace(',', '.')) || 0 : 0; }
 
     function fmtResult(val, isTZS) {
       if (!isFinite(val) || val === 0) return '0';
-      if (isTZS) {
-        return val.toLocaleString('de-DE', { maximumFractionDigits: 0 });
-      }
-      return val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return isTZS
+        ? val.toLocaleString('de-DE', { maximumFractionDigits: 0 })
+        : val.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function render() {
-      const amount = parseNum();
-      const isEUR  = mode === 'EUR_TO_TZS';
-      const result = isEUR ? amount * rate : amount / rate;
+      const isEUR   = mode === 'EUR_TO_TZS';
+      const amount  = parseNum();
+      const result  = isEUR ? amount * rate : amount / rate;
 
       document.getElementById('labelFrom').textContent = isEUR ? 'EUR' : 'TZS';
       document.getElementById('labelTo'  ).textContent = isEUR ? 'TZS' : 'EUR';
 
-      const fromEl = document.getElementById('amtFrom');
-      const toEl   = document.getElementById('amtTo');
+      const fe = document.getElementById('amtFrom');
+      const te = document.getElementById('amtTo');
 
-      fromEl.textContent = fmtInput(input);
-      fromEl.classList.toggle('zero', !input);
+      fe.textContent = input || '0';
+      fe.classList.toggle('zero', !input);
 
-      toEl.textContent = fmtResult(result, isEUR /* result is TZS when isEUR */);
-      toEl.classList.toggle('zero', amount === 0);
-
-      // auto-shrink large numbers in the input row
+      // auto-shrink long input
       const len = (input || '0').length;
-      fromEl.style.fontSize = len > 10 ? '28px' : len > 7 ? '36px' : '44px';
+      fe.style.fontSize = len > 10 ? '24px' : len > 7 ? '30px' : '38px';
+
+      te.textContent = fmtResult(result, isEUR);
+      te.classList.toggle('zero', amount === 0);
     }
 
     function renderRate() {
@@ -438,16 +445,14 @@
       el.textContent = `1 EUR = ${r} TZS${rateDate ? '  ·  ' + rateDate : ''}`;
     }
 
-    // ─── Keyboard support (desktop testing) ──────────────────
     document.addEventListener('keydown', e => {
       if (e.key >= '0' && e.key <= '9') press(e.key);
       else if (e.key === ',' || e.key === '.') press(',');
       else if (e.key === 'Backspace') press('back');
       else if (e.key === 'Escape' || e.key.toLowerCase() === 'c') press('C');
-      else if (e.key === 's' || e.key === 'S') swap();
+      else if (e.key.toLowerCase() === 's') swap();
     });
 
-    // Initial render
     render();
     renderRate();
   </script>

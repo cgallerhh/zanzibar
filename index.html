@@ -524,7 +524,14 @@
       render();
     }
 
-    function parseNum()  { return input ? parseFloat(input.replace(',', '.')) || 0 : 0; }
+    function parseNum() { return input ? parseFloat(input.replace(',', '.')) || 0 : 0; }
+
+    function fmtInput(str) {
+      if (!str) return '0';
+      const parts = str.split(',');
+      const intFmt = Number(parts[0] || '0').toLocaleString('de-DE', { maximumFractionDigits: 0 });
+      return parts.length === 1 ? intFmt : intFmt + ',' + parts[1];
+    }
 
     function fmtResult(val, isTZS) {
       if (!isFinite(val) || val === 0) return '0';
@@ -544,7 +551,7 @@
       const fe = document.getElementById('amtFrom');
       const te = document.getElementById('amtTo');
 
-      fe.textContent = input || '0';
+      fe.textContent = fmtInput(input);
       fe.classList.toggle('zero', !input);
 
       // auto-shrink long input

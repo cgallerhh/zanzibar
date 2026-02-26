@@ -442,8 +442,8 @@
 
     <!-- Currency mode selectors + clear functions -->
     <div class="ctrl-bar">
-      <button class="btn-ctrl btn-mode active" id="btnEUR" ontouchstart="" onclick="setMode('EUR')">EUR</button>
-      <button class="btn-ctrl btn-mode"        id="btnTZS" ontouchstart="" onclick="setMode('TZS')">TZS</button>
+      <button class="btn-ctrl btn-mode active" id="btnTZS" ontouchstart="" onclick="setMode('TZS')">TZS</button>
+      <button class="btn-ctrl btn-mode"        id="btnEUR" ontouchstart="" onclick="setMode('EUR')">EUR</button>
       <button class="btn-ctrl btn-mode"        id="btnUSD" ontouchstart="" onclick="setMode('USD')">USD</button>
       <button class="btn-ctrl btn-ctrl-f"      ontouchstart="" onclick="press('C')">C</button>
       <button class="btn-ctrl btn-ctrl-f"      ontouchstart="" onclick="press('back')">⌫</button>
@@ -472,7 +472,7 @@
 
   <script>
     let input   = '';
-    let mode    = 'EUR';
+    let mode    = 'TZS';
     let rate    = 2760;
     let rateUSD = 1.08;
     let rateDate = '';

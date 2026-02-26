@@ -33,12 +33,6 @@
       --lcd-ink2:    #1E3C1C;
       --lcd-dim:     #4A6448;
       --lcd-rate:    #6A8468;
-      --btn-num-a:   #363636;
-      --btn-num-b:   #060606;
-      --btn-fn-a:    #1E2E1E;
-      --btn-fn-b:    #04080A;
-      --btn-or-a:    #F8A020;
-      --btn-or-b:    #C05C06;
       --led-g:       #18A022;
       --led-r:       #C82020;
     }
@@ -71,29 +65,21 @@
       padding: 22px 18px 28px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      /* Top face edge highlight */
+      gap: 14px;
       border-top: 1px solid rgba(255,255,255,0.08);
       border-left: 1px solid rgba(255,255,255,0.04);
       border-right: 1px solid rgba(0,0,0,0.6);
       border-bottom: 1px solid rgba(0,0,0,0.8);
       box-shadow:
-        /* Close ambient */
         0 2px 4px   rgba(0,0,0,0.99),
-        /* Near shadow */
         0 8px 18px  rgba(0,0,0,0.95),
-        /* Mid shadow */
         0 22px 44px rgba(0,0,0,0.85),
-        /* Far penumbra */
         0 50px 90px rgba(0,0,0,0.65),
-        /* Massive ground shadow */
         0 90px 160px rgba(0,0,0,0.40),
-        /* Inner surface ambient */
         inset 0 1px 0 rgba(255,255,255,0.07),
         inset 0 0 80px rgba(0,0,0,0.30);
     }
 
-    /* Subtle bottom "thickness" edge — suggests device has physical depth */
     .calc-body::after {
       content: '';
       position: absolute;
@@ -133,7 +119,6 @@
 
     /* ── LCD Display — recessed into body ── */
     .display-well {
-      /* Outer sunken recess frame */
       background: #0C0C0C;
       border-radius: 6px;
       padding: 3px;
@@ -143,7 +128,6 @@
         inset 2px 0 4px  rgba(0,0,0,0.4),
         inset -2px 0 4px rgba(0,0,0,0.4),
         inset 0 -1px 4px rgba(0,0,0,0.4),
-        /* Top rim highlight (light catches front edge of recess) */
         0 -1px 0 rgba(255,255,255,0.06);
     }
 
@@ -151,7 +135,7 @@
       background: linear-gradient(175deg, var(--lcd-bg) 0%, var(--lcd-bg2) 100%);
       border: 1px solid var(--lcd-border);
       border-radius: 4px;
-      padding: 14px 16px 12px;
+      padding: 12px 16px 10px;
       display: flex;
       flex-direction: column;
       gap: 0;
@@ -166,7 +150,7 @@
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      padding: 5px 0;
+      padding: 4px 0;
     }
 
     .disp-label {
@@ -186,11 +170,11 @@
       text-align: right;
       line-height: 1.15;
       transition: opacity 0.08s;
-      position: relative; /* anchor for ghost layer */
+      position: relative;
       white-space: nowrap;
     }
 
-    /* Ghost segments — unlit LCD segments shown faintly behind */
+    /* Ghost segments */
     .disp-val::before {
       content: attr(data-ghost);
       position: absolute;
@@ -227,7 +211,7 @@
       letter-spacing: 0.1em;
       color: var(--lcd-rate);
       text-align: right;
-      padding-top: 7px;
+      padding-top: 6px;
     }
 
     /* ── LED indicators ── */
@@ -288,14 +272,76 @@
       box-shadow: 0 0 3px rgba(24,160,34,0.8);
     }
 
-    /* ── Keypad ── */
+    /* ── Control bar: currency mode buttons + function buttons ── */
+    .ctrl-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-ctrl {
+      flex: 1;
+      height: 50px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      transition: transform 65ms ease, filter 65ms ease;
+    }
+
+    .btn-ctrl:active {
+      transform: scale(0.93) translateY(1px);
+      filter: brightness(0.78);
+    }
+
+    /* Mode button — inactive (dark amber) */
+    .btn-mode {
+      background: linear-gradient(175deg, #8A4008 0%, #4A1A02 100%);
+      color: rgba(255,220,160,0.55);
+      box-shadow:
+        0 3px 7px rgba(0,0,0,0.85),
+        inset 0 1px 0 rgba(255,160,60,0.10),
+        inset 0 -1px 0 rgba(0,0,0,0.5);
+    }
+
+    /* Mode button — active (bright orange, "lit up") */
+    .btn-mode.active {
+      background: linear-gradient(175deg, #FFBA30 0%, #C46010 60%, #A04808 100%);
+      color: #FFF2DC;
+      box-shadow:
+        0 3px 8px rgba(0,0,0,0.75),
+        0 0 16px rgba(240,140,20,0.50),
+        0 0 32px rgba(220,110,10,0.22),
+        inset 0 1px 0 rgba(255,230,120,0.45),
+        inset 0 -1px 0 rgba(0,0,0,0.35);
+    }
+
+    /* Function button (C / ⌫) — dark green */
+    .btn-ctrl-f {
+      background: linear-gradient(175deg, #1E2E1E 0%, #060A06 100%);
+      color: #8AAA8A;
+      box-shadow:
+        0 3px 7px rgba(0,0,0,0.85),
+        inset 0 1px 0 rgba(100,160,100,0.08),
+        inset 0 -1px 0 rgba(0,0,0,0.5);
+    }
+
+    /* ── Keypad — 4 digit rows ── */
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
     }
 
-    /* ── Buttons — high-relief round domes ── */
+    /* ── Round dome buttons ── */
     .btn {
       aspect-ratio: 1;
       border: none;
@@ -323,16 +369,12 @@
       font-size: 28px;
       font-weight: 300;
       box-shadow:
-        /* Socket ring */
         0 0 0 1.5px #020202,
-        /* Direct drop shadow */
         0 5px 8px   rgba(0,0,0,1),
         0 10px 20px rgba(0,0,0,0.90),
         0 18px 36px rgba(0,0,0,0.70),
-        /* Specular highlight top of dome */
         inset 0 4px 7px  rgba(255,255,255,0.16),
         inset 1px 2px 4px rgba(255,255,255,0.08),
-        /* Dome depth (bottom half) */
         inset 0 -6px 14px rgba(0,0,0,0.80);
     }
 
@@ -346,82 +388,6 @@
         inset 0 2px 4px  rgba(255,255,255,0.08),
         inset 0 6px 14px rgba(0,0,0,0.85);
     }
-
-    /* Function dome — dark green tint */
-    .btn-f {
-      background: radial-gradient(ellipse at 36% 28%,
-        #243224 0%,
-        #101810 38%,
-        #040804 72%,
-        #020402 100%);
-      color: #9AB49A;
-      font-size: 15px;
-      font-weight: 500;
-      box-shadow:
-        0 0 0 1.5px #020402,
-        0 5px 8px   rgba(0,0,0,1),
-        0 10px 20px rgba(0,0,0,0.90),
-        0 18px 36px rgba(0,0,0,0.70),
-        inset 0 4px 7px  rgba(255,255,255,0.12),
-        inset 1px 2px 4px rgba(255,255,255,0.05),
-        inset 0 -6px 14px rgba(0,0,0,0.85);
-    }
-
-    .btn-f:active {
-      transform: scale(0.91) translateY(2px);
-      filter: brightness(0.75);
-      box-shadow:
-        0 0 0 1.5px #020402,
-        0 2px 4px rgba(0,0,0,1),
-        0 4px 8px rgba(0,0,0,0.9),
-        inset 0 2px 4px  rgba(255,255,255,0.06),
-        inset 0 6px 14px rgba(0,0,0,0.88);
-    }
-
-    /* Orange dome — warm glow */
-    .btn-o {
-      background: radial-gradient(ellipse at 36% 28%,
-        #FFBA30 0%,
-        #E88010 40%,
-        #B05008 72%,
-        #803006 100%);
-      color: #FFF5E8;
-      box-shadow:
-        0 0 0 1.5px #5A1E02,
-        0 5px 8px   rgba(0,0,0,1),
-        0 10px 20px rgba(0,0,0,0.85),
-        0 18px 36px rgba(0,0,0,0.65),
-        /* Orange ambient glow */
-        0 0 24px    rgba(220,110,10,0.35),
-        0 0 48px    rgba(200,90,8,0.15),
-        inset 0 4px 8px  rgba(255,230,120,0.35),
-        inset 1px 2px 4px rgba(255,255,200,0.15),
-        inset 0 -6px 14px rgba(0,0,0,0.60);
-    }
-
-    .btn-o:active {
-      transform: scale(0.91) translateY(2px);
-      filter: brightness(0.78);
-      box-shadow:
-        0 0 0 1.5px #5A1E02,
-        0 2px 4px rgba(0,0,0,1),
-        0 4px 8px rgba(0,0,0,0.9),
-        0 0 12px rgba(220,110,10,0.25),
-        inset 0 2px 4px  rgba(255,230,120,0.15),
-        inset 0 6px 14px rgba(0,0,0,0.65);
-    }
-
-    /* Orange button inner layout */
-    .swap-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      line-height: 1;
-    }
-
-    .swap-arrows { font-size: 18px; }
-    .swap-text   { font-size: 7.5px; font-weight: 600; letter-spacing: 0.16em; opacity: 0.85; }
 
     /* Swap flash */
     @keyframes lcdFlash {
@@ -440,23 +406,23 @@
 
     <div class="brand-row">
       <span class="brand">BrAun</span>
-      <span class="model">ET 77 · TZS / EUR</span>
+      <span class="model">ET 77 · TZS / EUR / USD</span>
     </div>
 
     <div class="display-well">
       <div class="display" id="display">
         <div class="disp-row">
-          <span class="disp-label" id="labelFrom">EUR</span>
+          <span class="disp-label" id="labelRow1">EUR</span>
           <span class="disp-val"   id="amtFrom">0</span>
         </div>
         <div class="disp-sep"></div>
         <div class="disp-row">
-          <span class="disp-label" id="labelTo">TZS</span>
+          <span class="disp-label" id="labelRow2">TZS</span>
           <span class="disp-val result" id="amtTo">0</span>
         </div>
         <div class="disp-sep"></div>
         <div class="disp-row">
-          <span class="disp-label">USD</span>
+          <span class="disp-label" id="labelRow3">USD</span>
           <span class="disp-val result" id="amtUSD">0</span>
         </div>
         <div class="disp-rate" id="rateInfo">Kurs wird geladen …</div>
@@ -474,16 +440,16 @@
       </div>
     </div>
 
-    <div class="keypad">
-      <button class="btn btn-f"  ontouchstart="" onclick="press('C')">C</button>
-      <button class="btn btn-f"  ontouchstart="" onclick="press('back')">⌫</button>
-      <button class="btn btn-o"  ontouchstart="" onclick="swap()">
-        <span class="swap-inner">
-          <span class="swap-arrows">⇅</span>
-          <span class="swap-text">TAUSCH</span>
-        </span>
-      </button>
+    <!-- Currency mode selectors + clear functions -->
+    <div class="ctrl-bar">
+      <button class="btn-ctrl btn-mode active" id="btnEUR" ontouchstart="" onclick="setMode('EUR')">EUR</button>
+      <button class="btn-ctrl btn-mode"        id="btnTZS" ontouchstart="" onclick="setMode('TZS')">TZS</button>
+      <button class="btn-ctrl btn-mode"        id="btnUSD" ontouchstart="" onclick="setMode('USD')">USD</button>
+      <button class="btn-ctrl btn-ctrl-f"      ontouchstart="" onclick="press('C')">C</button>
+      <button class="btn-ctrl btn-ctrl-f"      ontouchstart="" onclick="press('back')">⌫</button>
+    </div>
 
+    <div class="keypad">
       <button class="btn btn-n" ontouchstart="" onclick="press('7')">7</button>
       <button class="btn btn-n" ontouchstart="" onclick="press('8')">8</button>
       <button class="btn btn-n" ontouchstart="" onclick="press('9')">9</button>
@@ -506,7 +472,7 @@
 
   <script>
     let input   = '';
-    let mode    = 'EUR_TO_TZS';
+    let mode    = 'EUR';
     let rate    = 2760;
     let rateUSD = 1.08;
     let rateDate = '';
@@ -551,12 +517,14 @@
       render();
     }
 
-    function swap() {
-      mode  = mode === 'EUR_TO_TZS' ? 'TZS_TO_EUR' : 'EUR_TO_TZS';
+    function setMode(m) {
+      mode  = m;
       input = '';
       const d = document.getElementById('display');
       d.classList.add('flash');
       setTimeout(() => d.classList.remove('flash'), 250);
+      document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn' + m).classList.add('active');
       render();
     }
 
@@ -577,45 +545,56 @@
     }
 
     function render() {
-      const isEUR   = mode === 'EUR_TO_TZS';
-      const amount  = parseNum();
-      const result  = isEUR ? amount * rate : amount / rate;
+      const amount = parseNum();
 
-      document.getElementById('labelFrom').textContent = isEUR ? 'EUR' : 'TZS';
-      document.getElementById('labelTo'  ).textContent = isEUR ? 'TZS' : 'EUR';
+      let fromLabel, toLabel1, toLabel2, toVal1, toVal2, isTZS1, isTZS2;
+
+      if (mode === 'EUR') {
+        fromLabel = 'EUR';
+        toLabel1 = 'TZS'; toVal1 = amount * rate;              isTZS1 = true;
+        toLabel2 = 'USD'; toVal2 = amount * rateUSD;           isTZS2 = false;
+      } else if (mode === 'TZS') {
+        fromLabel = 'TZS';
+        toLabel1 = 'EUR'; toVal1 = amount / rate;              isTZS1 = false;
+        toLabel2 = 'USD'; toVal2 = (amount / rate) * rateUSD;  isTZS2 = false;
+      } else { /* USD */
+        fromLabel = 'USD';
+        toLabel1 = 'EUR'; toVal1 = amount / rateUSD;            isTZS1 = false;
+        toLabel2 = 'TZS'; toVal2 = (amount / rateUSD) * rate;   isTZS2 = true;
+      }
+
+      document.getElementById('labelRow1').textContent = fromLabel;
+      document.getElementById('labelRow2').textContent = toLabel1;
+      document.getElementById('labelRow3').textContent = toLabel2;
 
       const fe = document.getElementById('amtFrom');
       const te = document.getElementById('amtTo');
+      const ue = document.getElementById('amtUSD');
 
       const fromStr = fmtInput(input);
-      const toStr   = fmtResult(result, isEUR);
+      const toStr1  = fmtResult(toVal1, isTZS1);
+      const toStr2  = fmtResult(toVal2, isTZS2);
 
-      fe.textContent    = fromStr;
-      fe.dataset.ghost  = fromStr.replace(/\d/g, '8');
+      fe.textContent   = fromStr;
+      fe.dataset.ghost = fromStr.replace(/\d/g, '8');
       fe.classList.toggle('zero', !input);
-
-      // auto-shrink based on formatted character count
       const flen = fromStr.length;
       fe.style.fontSize = flen > 11 ? '20px' : flen > 8 ? '26px' : '34px';
 
-      te.textContent   = toStr;
-      te.dataset.ghost = toStr.replace(/\d/g, '8');
+      te.textContent   = toStr1;
+      te.dataset.ghost = toStr1.replace(/\d/g, '8');
       te.classList.toggle('zero', amount === 0);
 
-      // USD row — always EUR-equivalent × rateUSD
-      const ue = document.getElementById('amtUSD');
-      const eurAmount = isEUR ? amount : amount / rate;
-      const usdAmount = eurAmount * rateUSD;
-      const usdStr    = fmtResult(usdAmount, false);
-      ue.textContent   = usdStr;
-      ue.dataset.ghost = usdStr.replace(/\d/g, '8');
+      ue.textContent   = toStr2;
+      ue.dataset.ghost = toStr2.replace(/\d/g, '8');
       ue.classList.toggle('zero', amount === 0);
     }
 
     function renderRate() {
       const el = document.getElementById('rateInfo');
       const r  = rate.toLocaleString('de-DE', { maximumFractionDigits: 0 });
-      el.textContent = `1 EUR = ${r} TZS${rateDate ? '  ·  ' + rateDate : ''}`;
+      const u  = rateUSD.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      el.textContent = `1 EUR = ${r} TZS · ${u} USD${rateDate ? '  ·  ' + rateDate : ''}`;
     }
 
     document.addEventListener('keydown', e => {
@@ -623,7 +602,9 @@
       else if (e.key === ',' || e.key === '.') press(',');
       else if (e.key === 'Backspace') press('back');
       else if (e.key === 'Escape' || e.key.toLowerCase() === 'c') press('C');
-      else if (e.key.toLowerCase() === 's') swap();
+      else if (e.key.toLowerCase() === 'e') setMode('EUR');
+      else if (e.key.toLowerCase() === 't') setMode('TZS');
+      else if (e.key.toLowerCase() === 'u') setMode('USD');
     });
 
     render();
